@@ -14,9 +14,9 @@ pipeline {
                 sh 'docker image push krishna8080/test1:1.0'
             }
         }
-        stage('image container') {
+        stage('deploy') {
             steps {
-                sh 'docker container run -d --name game -P krishna8080/test1:1.0'
+                sh 'kubectl apply -f deploy.yml'
             }
         }
     }

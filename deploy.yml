@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: game
+spec:
+  minReadySeconds: 10
+  replicas: 2
+  selector:
+    matchLabels:
+      app: game
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: game-of-life
+      labels:
+        app: game
+    spec:
+      containers:
+        - name: game-of-life
+          image: krishna8080/test1:1.0
+          ports:
+            - containerPort: 9090
+              protocol: TCP
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: game-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: game
+  ports:
+    - name: game
+      port: 9090
+      targetPort: 9090
